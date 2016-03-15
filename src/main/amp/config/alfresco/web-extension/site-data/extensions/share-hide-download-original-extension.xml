@@ -1,0 +1,15 @@
+<extension>
+  <modules>
+    <module>
+      <id>Hide Download Original menu item on quickshare page (share-hide-download-original)</id>
+      <version>1.0</version>
+      <auto-deploy>true</auto-deploy>
+      <customizations>
+        <customization>
+          <targetPackageRoot>org.alfresco.components.head</targetPackageRoot>
+          <sourcePackageRoot>dk.magenta.share-hide-download-original-extension.components.head</sourcePackageRoot>
+        </customization>
+      </customizations>
+    </module>
+  </modules>
+</extension>
