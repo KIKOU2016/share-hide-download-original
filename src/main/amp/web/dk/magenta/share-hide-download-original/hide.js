@@ -67,3 +67,54 @@
     var intervalId = setInterval(handleWebPreview, 100);
   }
 })();
+
+
+
+(function () {
+  // Redmine issue #15066
+  // Override the previewer to set element height using !important style.
+  // This is due to a problem with tablet.css where it specifies the CSS rule:
+  /*
+  .web-preview .previewer
+  {
+    height: auto !important;
+  }
+  */
+  // That causes the PDF previewer's height to be too small on iPhone/Android.
+  Alfresco.WebPreview.prototype.Plugins.PdfJs.prototype._setPreviewerElementHeight = function ()
+  {
+    // Is the viewer maximized?
+    if (!this.maximized)
+    {
+      var dialogPane;
+      if (this.inDashlet)
+      {
+        this.wp.getPreviewerElement().setAttribute('style', 'height: ' + (Dom.getClientHeight() - 64) + "px !important");
+      }
+      else if (dialogPane = Dom.getAncestorByClassName(this.wp.getPreviewerElement(), "dijitDialogPaneContent"))
+      {
+        var h = Dom.getStyle(dialogPane, "height");
+        var previewHeight = (parseInt(h)-42) + "px";
+        this.wp.getPreviewerElement().setAttribute('style', 'height: ' + previewHeight + " !important");
+      }
+      else
+      {
+        var sourceYuiEl = new YAHOO.util.Element(this.wp.getPreviewerElement()),
+            docHeight = Dom.getDocumentHeight(),
+            clientHeight = Dom.getClientHeight();
+        // Take the smaller of the two
+        var previewHeight = ((docHeight < clientHeight) ? docHeight : clientHeight) - 220;
+        // Leave space for header etc.
+        this.wp.getPreviewerElement().setAttribute('style', 'height: ' + previewHeight + "px !important");
+      }
+    }
+    else if (this.fullscreen)
+    {
+      // Do nothing
+    }
+    else
+    {
+      this.wp.getPreviewerElement().setAttribute('style', 'height: ' + (window.innerHeight || Dom.getViewportHeight()).toString() + "px !important");
+    }
+  };
+})();

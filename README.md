@@ -9,3 +9,6 @@ Additionally, URLs to Download PDF on document-details are formed such
 that the filename is included in the URL.
 
 Use `mvn package` to build an AMP file in the target directory.
+
+Additionally, included is a bugfix for a problem with the PdfJS viewer's height
+when displaying on iPhone/Android.
